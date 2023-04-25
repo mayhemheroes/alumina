@@ -172,7 +172,7 @@ Additionally, to compile the tools, such as `alumina-doc`, these prerequisites a
    sudo make install
    # sudo ldconfig
    ```
-  - [`libbacktrace`](https://github.com/ianlancetaylor/libbacktrace/) is an optional dependency for nice stack backtraces on panics. If disabled, pass `STD_BACKTRACE=1` when builting `aluminac` to use the libc's backtrace function instead.
+  - [`libbacktrace`](https://github.com/ianlancetaylor/libbacktrace/) is an optional dependency for nice stack backtraces on panics. If disabled, pass `STD_BACKTRACE=1` when builting to use the libc's backtrace function instead.
    ```bash
    git clone https://github.com/ianlancetaylor/libbacktrace
    cd libbacktrace
@@ -213,9 +213,9 @@ cc threading.c -o threading -lpthread
 ```
 
 
-To compile the self-hosted compiler, run:
+To compile the tools
 ```
-make aluminac
+make tools
 ```
 
 See the [language guide](./docs/lang_guide.md), assorted [examples](./examples), [standard library](./sysroot) for a tour of the language.

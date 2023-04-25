@@ -171,10 +171,6 @@ pub enum CodeDiagnostic {
     RangeIndexNonSlice,
     #[error("internal error: {}", .0)]
     InternalError(String, ByRef<Backtrace>),
-    // This error is a compiler bug if it happens on its own, but it can pop up when
-    // we abort early due to a previous error.
-    #[error("local with unknown type")]
-    LocalWithUnknownType,
     #[error("unsupported ABI {:?}", .0)]
     UnsupportedABI(String),
     #[error("unknown intrinsic `{}`", .0)]
@@ -192,7 +188,7 @@ pub enum CodeDiagnostic {
     #[error("macro expected")]
     MacroExpected,
     #[error("this expression is not evaluable at compile time ({})", .0)]
-    CannotConstEvaluate(ConstEvalErrorKind),
+    CannotConstEvaluate(#[from] ConstEvalErrorKind),
     #[error("values of enum variants can only be integers")]
     InvalidValueForEnumVariant,
     #[error("{}", .0)]

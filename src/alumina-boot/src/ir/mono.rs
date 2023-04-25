@@ -71,7 +71,7 @@ pub struct MonoCtx<'ast, 'ir> {
     vtable_layouts: HashMap<&'ir [ir::TyP<'ir>], ir::VtableLayout<'ir>>,
     static_inits: Vec<ir::IRItemP<'ir>>,
     malloc_bag: MallocBag<'ir>,
-    caches: Caches<'ast, 'ir>,
+    caches: Caches<'ast, 'ir>
 }
 
 #[derive(Clone)]
@@ -3277,7 +3277,7 @@ impl<'a, 'ast, 'ir> Monomorphizer<'a, 'ast, 'ir> {
             .local_types
             .get(&id)
             .copied()
-            .ok_or_else(|| self.diag.err(CodeDiagnostic::LocalWithUnknownType))?;
+            .unwrap_or_else(|| self.types.builtin(BuiltinType::Never));
 
         Ok(self.exprs.local(id, typ, ast_span))
     }
@@ -3297,7 +3297,7 @@ impl<'a, 'ast, 'ir> Monomorphizer<'a, 'ast, 'ir> {
             .local_types
             .get(&self_arg)
             .copied()
-            .ok_or_else(|| self.diag.err(CodeDiagnostic::LocalWithUnknownType))?;
+            .unwrap_or_else(|| self.types.builtin(BuiltinType::Never));
 
         match typ.canonical_type() {
             ir::Ty::Item(item) => {
@@ -4349,6 +4349,9 @@ impl<'a, 'ast, 'ir> Monomorphizer<'a, 'ast, 'ir> {
             }
         };
 
+        if ir_self_arg.diverges() {
+            return Ok(Some(ir_self_arg));
+        }
         let canonical = ir_self_arg.ty.canonical_type();
 
         if let Some(LangTypeKind::Dyn(ir::Ty::Tuple(protocols), dyn_ptr)) =
@@ -4812,6 +4815,10 @@ impl<'a, 'ast, 'ir> Monomorphizer<'a, 'ast, 'ir> {
 
         if generic_args.is_some() {
             bail!(self, CodeDiagnostic::UnexpectedGenericArgs);
+        }
+
+        if obj.diverges() {
+            return Ok(obj);
         }
 
         let result = match obj.ty.canonical_type() {

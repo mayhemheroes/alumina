@@ -27,7 +27,7 @@ use super::{lang::LangItemKind, AstId, Item, ItemP, TestMetadata};
 
 #[derive(Error, Debug)]
 pub enum Error {
-    #[error("io error: {0}")]
+    #[error("{0}")]
     Io(#[from] std::io::Error),
     #[error("malformed AST")]
     Malformed,

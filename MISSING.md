@@ -42,7 +42,6 @@
   - date/time???? this is a big can of worms
     - durations/monotonic timer are implemented
   - regexes? probably not, maybe a PCRE wrapper outside stdlib
-  - JSON? Some sort of Serde-like generic serialization/deserialization would be nice to have built-in
   - vectored I/O?
 
 ## Optimizations
@@ -75,7 +74,6 @@
     - Spaghetti gotos need to be converted to LLVM basic blocks
 - Clean up `mono`. It's a mess.
 - Should monomorphization and type checking be separate stages? Can this even be done with the loose duck-typed language?
-- Will the compiler architecture scale to large programs? Is it possible to pre-compile the libraries at least to AST?
 - AST expression should have a convenience builder, like the one for IR expressions. `expressions.rs` is overly verbose right now, especially with all the span tagging.
 - Most panics should probably use `ice!` macro to report the source span where the compiler panicked
 - Cross-compilation

@@ -58,7 +58,6 @@ CODEGEN = $(BUILD_DIR)/aluminac-generate
 STDLIB_TESTS = $(BUILD_DIR)/stdlib-tests
 LIBRARIES_TESTS = $(BUILD_DIR)/libraries-tests
 LANG_TESTS = $(BUILD_DIR)/lang-tests
-DOCTEST = $(BUILD_DIR)/doctest
 
 SYSROOT_AST = $(BUILD_DIR)/sysroot.ast
 SYSROOT_TEST_AST = $(BUILD_DIR)/sysroot-test.ast
@@ -169,6 +168,7 @@ $(LIBRARIES_TESTS): $(LIBRARIES_TESTS).c
 
 ALUMINA_DOC = $(BUILD_DIR)/alumina-doc
 ALUMINA_DOC_SOURCES = $(shell find tools/alumina-doc/ -type f -name '*.alu')
+DOCTEST = $(BUILD_DIR)/doctest
 
 $(ALUMINA_DOC).c: $(ALU_DEPS) $(ALU_LIBRARIES) $(ALUMINA_DOC_SOURCES) libraries/aluminac/lib/node_kinds.alu
 	$(ALUMINA_BOOT) $(ALUMINA_FLAGS_COMMON) --output $@ \
@@ -195,7 +195,20 @@ $(DOCTEST).c: $(ALU_TEST_DEPS) $(BUILD_DIR)/doctest.alu
 $(DOCTEST): $(DOCTEST).c
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-.PHONY: docs test-docs serve-docs watch-docs
+COMPILE_TEST = $(BUILD_DIR)/compile-test
+COMPILE_TEST_SOURCES = $(shell find tools/compile-test/ -type f -name '*.alu')
+
+$(COMPILE_TEST).c: $(ALU_DEPS) $(ALU_LIBRARIES) $(COMPILE_TEST_SOURCES)
+	$(ALUMINA_BOOT) $(ALUMINA_FLAGS_COMMON) --output $@ \
+		$(call alumina_modules,$(ALU_LIBRARIES),libraries/,/) \
+		$(call alumina_modules,$(COMPILE_TEST_SOURCES),tools/,/)
+
+$(COMPILE_TEST): $(COMPILE_TEST).c
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) -ltree-sitter
+
+.PHONY: tools docs test-docs serve-docs watch-docs
+tools: $(ALUMINA_DOC) $(COMPILE_TEST)
+
 docs: $(BUILD_DIR)/doctest.alu
 
 test-docs: $(DOCTEST)

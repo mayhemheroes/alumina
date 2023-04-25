@@ -1,0 +1,7 @@
+fn main(args: &[&[u8]]) {
+    let i = 0usize;
+    while i < args.len() {
+        println!("{}", args[i]);
+        i += 1;
+    }
+}

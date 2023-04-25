@@ -235,12 +235,6 @@ pub enum ConstEvalErrorKind {
     Return,
 }
 
-impl From<ConstEvalErrorKind> for CodeDiagnostic {
-    fn from(kind: ConstEvalErrorKind) -> Self {
-        CodeDiagnostic::CannotConstEvaluate(kind)
-    }
-}
-
 macro_rules! numeric_of_kind {
     ($kind:expr, $val:expr) => {
         match $kind {
