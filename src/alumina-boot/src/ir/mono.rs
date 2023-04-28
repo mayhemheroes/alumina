@@ -71,7 +71,7 @@ pub struct MonoCtx<'ast, 'ir> {
     vtable_layouts: HashMap<&'ir [ir::TyP<'ir>], ir::VtableLayout<'ir>>,
     static_inits: Vec<ir::IRItemP<'ir>>,
     malloc_bag: MallocBag<'ir>,
-    caches: Caches<'ast, 'ir>
+    caches: Caches<'ast, 'ir>,
 }
 
 #[derive(Clone)]
