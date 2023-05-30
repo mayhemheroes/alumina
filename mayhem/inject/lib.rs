@@ -1,0 +1,12 @@
+pub mod ast;
+pub mod codegen;
+pub mod common;
+pub mod compiler;
+pub mod diagnostics;
+pub mod global_ctx;
+pub mod intrinsics;
+pub mod ir;
+pub mod name_resolution;
+pub mod parser;
+pub mod utils;
+pub mod visitors;
