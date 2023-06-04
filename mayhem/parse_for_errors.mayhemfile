@@ -1,0 +1,6 @@
+project: alumina
+target: parse-for-errors
+cmds:
+    - cmd: /parse_for_errors
+testsuite:
+    - file://examples

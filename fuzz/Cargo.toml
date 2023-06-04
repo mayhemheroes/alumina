@@ -1,0 +1,31 @@
+[package]
+name = "alumina-fuzz"
+version = "0.0.0"
+authors = ["Automatically generated"]
+publish = false
+edition = "2018"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+honggfuzz = "0.5.55"
+
+[dependencies.alumina-boot]
+path = "../src/alumina-boot"
+
+# Prevent this from interfering with workspaces
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "parse_for_errors"
+path = "fuzz_targets/parse_for_errors.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "parse_no_errors"
+path = "fuzz_targets/parse_no_errors.rs"
+test = false
+doc = false
